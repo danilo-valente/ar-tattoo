@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+<script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var isDebug = urlParams.has('debug');
+
+    var debugWrap = fn => !isDebug ? fn : function () {
+        try {
+            return fn();
+        } catch (err) {
+            alert(err);
+        }
+    }
+
+    if (isDebug) {
+        window.addEventListener('error', function (err) {
+            alert(err);
+        });
+    }
+
+    AFRAME.registerComponent('soundhandler', {
+        init: function () {
+            this.soundEl = document.querySelector('#meteu-essa [sound]');
+            this.marker = document.querySelector('#meteu-essa');
+            this.visible = false;
+        },
+        tick: debugWrap(function () {
+            if (this.marker.object3D.visible && !this.visible) {
+                this.soundEl.components.sound.playSound();
+                this.visible = true; // make sure it plays only once per visible
+            } else if (!this.marker.object3D.visible && this.visible) {
+                this.soundEl.components.sound.pauseSound();
+                this.visible = false;
+            }
+        })
+    });
+</script>
+<body style="margin : 0px; overflow: hidden;">
+<a-scene embedded
+         soundhandler
+         arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3_HAMMING63; labelingMode: white_region; borderSize: 0.2;"
+         renderer="precision: medium;"
+         debug
+>
+    <a-assets>
+        <audio id="sound-meteu-essa" src="/meteu-essa.ogg" preload="auto"></audio>
+    </a-assets>
+
+    <a-marker id="meteu-essa" type="barcode" value="0">
+        <a-image
+                src="/meteu-essa.jpg"
+                rotation="90 180 0"
+                position="0 0 0"
+                scale="-4 4 4"
+        />
+        <a-entity
+                sound="src: #sound-meteu-essa"
+                autoplay="false"
+                loop="true"
+        />
+    </a-marker>
+
+    <a-entity camera />
+</a-scene>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "ar-tattoo",
+  "description": "Augmented Reality Tattoo",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "node": "^14.4"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "scripts": {
+    "dev": "live-server ./public --port=3000"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
